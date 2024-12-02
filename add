@@ -1,0 +1,12 @@
+@model StudentInfo.Models.Course
+
+<div class="rc">
+    <div class=" my-3">
+        <select asp-items="ViewBag.courses" id="cid" name="cid" class="form-control">
+            <option value="">--Select Courses--</option>
+        </select>
+    </div>
+    <div>
+        <button class="remove btn btn-danger">remove</button>
+    </div>
+</div>
