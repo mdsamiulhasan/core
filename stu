@@ -1,0 +1,12 @@
+  public class Student
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int sid { get; set; }
+        public string? sname { get; set; }
+        public int age { get; set; }
+        public string? image { get; set; }
+        public bool isActive { get; set; }
+        public DateTime birth { get; set; }
+        public virtual IList<Admission>? Admissions { get; set; }
+
+    }
