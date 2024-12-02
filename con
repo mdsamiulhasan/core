@@ -1,0 +1,62 @@
+ private readonly StudentDbContext db;
+        private readonly IWebHostEnvironment en;
+
+        public StudentController(StudentDbContext db, IWebHostEnvironment en)
+        {
+            this.db = db;
+            this.en = en;
+        }
+        public IActionResult Index()
+        {
+            var students = db.Students.Include(e => e.Admissions).ThenInclude(c => c.Course).OrderByDescending
+                (s => s.sid).ToList();
+            return View(students);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewBag.courses = new SelectList(db.Courses.ToList(), "cid", "cname");
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(StudentVM studentVM, int[] cid)
+        {
+            if (ModelState.IsValid)
+            {
+                var student = new Student()
+                {
+                    sname = studentVM.sname,
+                    age = studentVM.age,
+                    birth = studentVM.birth,
+                    isActive = studentVM.isActive,
+                };
+                string file = DateTime.Now.Ticks.ToString() + Path.GetExtension(studentVM.imageFile.FileName);
+                string filePath = en.WebRootPath + "/Images/" + file;
+                using (var strem = System.IO.File.Create(filePath))
+                {
+                    studentVM.imageFile.CopyTo(strem);
+                }
+                student.image = "/Images/" + file;
+                foreach (var item in cid)
+                {
+                    Admission enrollment = new Admission() {
+                        Student = student,
+                        sid = student.sid,
+                        cid = item
+
+                    };
+                    await db.Admissions.AddAsync(enrollment);
+                }
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+
+
+            }
+            return View(studentVM);
+        }
+        public async Task<IActionResult> AddNewCourses(int? id)
+        {
+            ViewBag.courses = new SelectList(await db.Courses.ToListAsync(), "cid", "cname", id ?? 0);
+            return PartialView("_addNewCourses");
+        }
+		
