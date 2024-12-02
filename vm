@@ -1,0 +1,13 @@
+ public  StudentVM()
+        {
+            Admission = new List<Admission>();
+        }
+        public int sid { get; set; }
+        [Display(Name = "Student ID is required.")]
+        public string? sname { get; set; }
+        public int age { get; set; }
+        public string? image { get; set; }
+        public IFormFile? imageFile { get; set; }   
+        public bool isActive { get; set; }
+        public DateTime birth { get; set; }
+        public List<Admission>? Admission { get; set; }
