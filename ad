@@ -1,0 +1,12 @@
+ public class Admission
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int aid { get; set; }
+        [ForeignKey("Student")]
+        public int sid { get; set; }
+        [ForeignKey("Course")]
+        public int cid { get; set; }
+        public virtual Student? Student { get; set; }
+        public virtual Course? Course { get; set; }
+
+    }
