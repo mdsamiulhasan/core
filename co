@@ -1,0 +1,9 @@
+ public class Course
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]  
+        public int cid { get; set; }
+        public string? cname { get; set; }
+
+        public virtual IList<Admission>? Admissions { get; set; }
+
+    }
